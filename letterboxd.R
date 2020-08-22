@@ -38,5 +38,10 @@ ratings <- year %>% dplyr::group_by(year$Rating)
 ratings_sum <- summarise(ratings, count=n())
 barplot(ratings_sum$count, names=ratings_sum$`year$Rating`, main="Ratings Spread")
 
-# 6 List of most watched films (names, counts)
-# print(year %>% group_by(Name) %>% filter(n() > 1) %>% slice_max(order_by = n(), n = 5))
+# 6 List of most watched films this year (names, counts)
+print(paste0("Most watched filmes in ", current_year))
+print(head(sort(table(year$Name), decreasing = TRUE), 5))
+
+# 7 List of most watched films of all time (names, counts)
+print("Most watched films")
+print(head(sort(table(diary$Name), decreasing = TRUE), 20))
