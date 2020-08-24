@@ -4,15 +4,22 @@ rm(list = ls())
 library(dplyr)
 library(lubridate)
 
+watched <- read.csv("C:/Users/jonol/Documents/letterboxd/watched.csv")
+print(paste0("Number of movies watched: ", nrow(watched)))
+
 diary <- read.csv("C:/Users/jonol/Documents/letterboxd/diary.csv")
+diary$Watched.Date <- as.Date(diary$Watched.Date)
 
 # 1 Diary Entries in Current Year
 current_year <- format(Sys.time(), "%Y")
 year <- diary %>% dplyr::filter(substr(Watched.Date,1,4) == current_year)
 print(paste0("Number of movies watched this year: ", nrow(year)))
 
-# 2 Column Chart of films watched by month/week
-year$Watched.Date <- as.Date(year$Watched.Date)
+# 2 Column Chart of films watched by year/month/week
+yearly <- diary %>% dplyr::group_by(year=floor_date(Watched.Date, "year"))
+yearly_sum <- summarise(yearly, count=n())
+yearly_sum$year <- format(yearly_sum$year, "%Y")
+barplot(yearly_sum$count, names=yearly_sum$year, main="Watches per Year")
 
 monthly <- year %>% dplyr::group_by(month=floor_date(Watched.Date, "month"))
 monthly_sum <- summarise(monthly, count=n())
