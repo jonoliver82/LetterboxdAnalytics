@@ -12,6 +12,13 @@ diary <- read.csv("C:/Users/jonol/Documents/letterboxd/diary.csv")
 diary$Watched.Date <- as.Date(diary$Watched.Date)
 print(paste0("Number of diary entries: ", nrow(diary)))
 
+# Create csv file of for each tag
+sapply(unique(diary$Tags), function(tag)
+  if(tag != "") {
+    write.csv(diary[diary$Tags==tag,],paste0("C:/Users/jonol/Documents/letterboxd/",tag,".csv"), row.names=FALSE)
+  }
+)
+
 # Obtain a list of films watched but not in the diary
 not_watched <- dplyr::anti_join(watched, diary, by="Name")
 print(paste0("Number of films watched but not diaried since ", min(diary$Watched.Date), " : ", nrow(not_watched)))
