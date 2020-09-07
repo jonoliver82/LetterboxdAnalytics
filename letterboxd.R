@@ -19,6 +19,16 @@ sapply(unique(diary$Tags), function(tag)
   }
 )
 
+# simple list of films with ratings
+ratings <- read.csv("C:/Users/jonol/Documents/letterboxd/ratings.csv")
+print(paste0("Number of movies with ratings: ", nrow(ratings)))
+write.csv(ratings[order(ratings$Name),c(2,5)], "C:/Users/jonol/Documents/letterboxd/simple_ratings.csv", row.names = FALSE)
+
+# ratings at 4.5 or 5 only
+high_ratings <- ratings %>% dplyr::filter(Rating > 4.0)
+print(paste0("Number of movies with rating greater than 4: ", nrow(high_ratings)))
+write.csv(high_ratings[order(high_ratings$Name),c(2,5)], "C:/Users/jonol/Documents/letterboxd/high_ratings.csv", row.names = FALSE)
+
 # Obtain a list of films watched but not in the diary
 not_watched <- dplyr::anti_join(watched, diary, by="Name")
 print(paste0("Number of films watched but not diaried since ", min(diary$Watched.Date), " : ", nrow(not_watched)))
